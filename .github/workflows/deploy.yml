@@ -3,28 +3,28 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Esto asegura que el despliegue ocurra en cada push a la rama 'main'
+      - main
 
 permissions:
-  contents: read    # Permiso para leer el contenido del repositorio
-  pages: write      # Permiso para escribir en GitHub Pages
-  id-token: write   # Permiso para generar un token de identificación
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # Utiliza una máquina Ubuntu para el despliegue
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4  # Descarga el código fuente del repositorio
+        uses: actions/checkout@v4
 
       - name: Setup Pages
-        uses: actions/configure-pages@v3  # Configura GitHub Pages para el despliegue
+        uses: actions/configure-pages@v3
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2  # Sube los archivos del proyecto para su despliegue
+        uses: actions/upload-pages-artifact@v2
         with:
-          path: .  # Sube todo el contenido del repositorio, asegurándote de que los archivos estén bien
+          path: .  # Todos los archivos de la raíz del repositorio serán desplegados
 
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v2  # Realiza el despliegue en GitHub Pages
+        uses: actions/deploy-pages@v2
