@@ -102,10 +102,46 @@
       font-size: 1.1em;
     }
 
-    /* Sombra en el header */
-    header {
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    /* Carrusel */
+    .carousel-container {
+      position: relative;
+      width: 80%;
+      margin: 0 auto;
+      overflow: hidden;
     }
+
+    .carousel {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+
+    .carousel img {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 10px;
+      border-radius: 10px;
+    }
+
+    button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      font-size: 2rem;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .prev {
+      left: 0;
+    }
+
+    .next {
+      right: 0;
+    }
+
   </style>
 </head>
 <body>
@@ -121,16 +157,68 @@
 
   <img src="images/sara-maikaha.png" alt="Sara Maikaha">
 
+  <!-- Carrusel de imágenes -->
   <section>
-    <p>Tu eres la verdad. <br>
-       Tu eres la respuesta. <br>
-       Toma la información y sé tu mismo. <br>
-       No sigas a nadie.</p>
+    <div class="carousel-container">
+      <div id="carousel" class="carousel">
+        <img src="images/sara-maikaha.png" alt="Imagen 1">
+        <!-- Las imágenes se agregarán aquí -->
+      </div>
+      <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+      <button class="next" onclick="moveSlide(1)">&#10095;</button>
+    </div>
+  </section>
+
+  <!-- Formulario de carga de imágenes -->
+  <section>
+    <h2>Sube tu imagen</h2>
+    <form id="uploadForm">
+      <input type="file" id="imageInput" accept="image/*" required>
+      <button type="submit" class="cta-button">Subir Imagen</button>
+    </form>
   </section>
 
   <footer>
     <p> Claridad Consiensia</p>
   </footer>
 
+  <script>
+    let slideIndex = 0;
+
+    function moveSlide(step) {
+      const slides = document.querySelectorAll("#carousel img");
+      slideIndex += step;
+
+      if (slideIndex < 0) {
+        slideIndex = slides.length - 1;
+      } else if (slideIndex >= slides.length) {
+        slideIndex = 0;
+      }
+
+      document.getElementById("carousel").style.transform = `translateX(-${slideIndex * 100}%)`;
+    }
+
+    document.getElementById("uploadForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const formData = new FormData();
+      const imageFile = document.getElementById("imageInput").files[0];
+      formData.append("image", imageFile);
+
+      // Llamar al backend para subir la imagen a Cloudinary
+      fetch('/upload', {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Agregar la nueva imagen al carrusel
+        const newImage = document.createElement("img");
+        newImage.src = data.imageUrl; // El backend devuelve la URL de la imagen
+        document.getElementById("carousel").appendChild(newImage);
+      })
+      .catch(error => console.error("Error al subir la imagen:", error));
+    });
+  </script>
 </body>
 </html>
