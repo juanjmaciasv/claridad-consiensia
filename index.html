@@ -206,7 +206,7 @@
       formData.append("image", imageFile);
 
       // Llamar al backend para subir la imagen a Cloudinary
-      fetch('/upload', {
+      fetch('https://claridad-backend-b3ba12597f85.herokuapp.com/upload', {  // URL del endpoint de Heroku
         method: 'POST',
         body: formData,
       })
