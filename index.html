@@ -103,7 +103,7 @@
         imagenes.forEach(url => {
           const slide = document.createElement("div");
           slide.classList.add("swiper-slide");
-          slide.innerHTML = <img src="${url}" alt="Imagen">;
+          slide.innerHTML = `<img src="${url}" alt="Imagen">`;  // Corregido aquí
           contenedor.appendChild(slide);
         });
 
@@ -139,7 +139,7 @@
           document.getElementById("statusMessage").style.display = "block";
           const nuevoSlide = document.createElement("div");
           nuevoSlide.classList.add("swiper-slide");
-          nuevoSlide.innerHTML = <img src="${data.imageUrl}" alt="Imagen">;
+          nuevoSlide.innerHTML = `<img src="${data.imageUrl}" alt="Imagen">`;  // Corregido aquí
           document.getElementById("carousel-container").appendChild(nuevoSlide);
           
           // Actualizar la galería con la nueva imagen
