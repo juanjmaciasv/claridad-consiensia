@@ -98,7 +98,7 @@
         const respuesta = await fetch(backendURL);
         const imagenes = await respuesta.json();
         const contenedor = document.getElementById("carousel-container");
-        contenedor.innerHTML = "";
+        contenedor.innerHTML = ""; // Limpiar el contenedor antes de agregar nuevas imágenes
 
         imagenes.forEach(url => {
           const slide = document.createElement("div");
@@ -141,6 +141,9 @@
           nuevoSlide.classList.add("swiper-slide");
           nuevoSlide.innerHTML = `<img src="${data.imageUrl}" alt="Imagen">`;
           document.getElementById("carousel-container").appendChild(nuevoSlide);
+          
+          // Actualizar la galería con la nueva imagen
+          cargarImagenes();
         }
       } catch (error) {
         document.getElementById("errorMessage").style.display = "block";
@@ -149,3 +152,4 @@
   </script>
 </body>
 </html>
+
