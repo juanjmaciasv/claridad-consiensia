@@ -93,7 +93,6 @@
   <script>
     const backendURL = "https://claridad-backend-b3ba12597f85.herokuapp.com/images";
 
-    // Cargar imágenes desde el backend
     async function cargarImagenes() {
       try {
         const respuesta = await fetch(backendURL);
@@ -104,11 +103,10 @@
         imagenes.forEach(url => {
           const slide = document.createElement("div");
           slide.classList.add("swiper-slide");
-          slide.innerHTML = `<img src="${url}" alt="Imagen">`;
+          slide.innerHTML = <img src="${url}" alt="Imagen">;
           contenedor.appendChild(slide);
         });
 
-        // Inicializar Swiper
         new Swiper('.swiper', {
           loop: true,
           autoplay: { delay: 2000, disableOnInteraction: false },
@@ -119,9 +117,8 @@
       }
     }
 
-    cargarImagenes(); // Cargar imágenes al cargar la página
+    cargarImagenes();
 
-    // Subir una nueva imagen al backend
     document.getElementById("uploadForm").addEventListener("submit", async function(event) {
       event.preventDefault();
       const formData = new FormData();
@@ -140,13 +137,12 @@
         const data = await respuesta.json();
         if (data.imageUrl) {
           document.getElementById("statusMessage").style.display = "block";
-          // Añadir la nueva imagen al carrusel
           const nuevoSlide = document.createElement("div");
           nuevoSlide.classList.add("swiper-slide");
-          nuevoSlide.innerHTML = `<img src="${data.imageUrl}" alt="Imagen">`;
+          nuevoSlide.innerHTML = <img src="${data.imageUrl}" alt="Imagen">;
           document.getElementById("carousel-container").appendChild(nuevoSlide);
           
-          // Cargar nuevamente la galería con la nueva imagen
+          // Actualizar la galería con la nueva imagen
           cargarImagenes();
         }
       } catch (error) {
@@ -156,4 +152,3 @@
   </script>
 </body>
 </html>
-
