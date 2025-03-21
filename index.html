@@ -8,6 +8,7 @@
   <meta name="author" content="Juan Macias">
   <title>Humanos conscientes</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   <style>
     /* General */
     body {
@@ -33,23 +34,32 @@
       font-weight: bold;
     }
 
-    /* Estilo para el mensaje de éxito */
-    .status-message {
+    /* Estilo para los mensajes */
+    .status-message, .error-message {
       margin-top: 10px;
       font-size: 1.5em;
       font-weight: bold;
-      color: #4caf50; /* Verde para éxito */
-      display: none; /* Ocultado inicialmente */
+      display: none;
     }
 
-    .error-message {
-      margin-top: 10px;
-      font-size: 1.5em;
-      font-weight: bold;
-      color: #f44336; /* Rojo para error */
-      display: none; /* Ocultado inicialmente */
+    .status-message { color: #4caf50; }
+    .error-message { color: #f44336; }
+
+    /* Estilo del carrusel */
+    .swiper {
+      width: 80%;
+      height: 300px;
+      margin: 20px auto;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     }
 
+    .swiper-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   </style>
 </head>
 <body>
@@ -67,46 +77,82 @@
       <button type="submit">Subir Imagen</button>
     </form>
     
-    <!-- Mensaje de éxito -->
     <div id="statusMessage" class="status-message">Imagen cargada con éxito!</div>
-
-    <!-- Mensaje de error -->
     <div id="errorMessage" class="error-message">Hubo un error al cargar la imagen.</div>
+  </section>
+
+  <!-- Carrusel de imágenes -->
+  <section>
+    <h2>Galería</h2>
+    <div class="swiper">
+      <div class="swiper-wrapper" id="carousel-container"></div>
+      <div class="swiper-pagination"></div>
+    </div>
   </section>
 
   <footer>
     <p>Claridad Consiensia</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
-    document.getElementById("uploadForm").addEventListener("submit", function(event) {
+    const backendURL = "https://claridad-backend-b3ba12597f85.herokuapp.com/images"; // Endpoint de imágenes
+
+    async function cargarImagenes() {
+      try {
+        const respuesta = await fetch(backendURL);
+        const imagenes = await respuesta.json(); // Suponiendo que devuelve un array de URLs
+
+        const contenedor = document.getElementById("carousel-container");
+        contenedor.innerHTML = ""; // Limpia antes de agregar nuevas imágenes
+
+        imagenes.forEach(url => {
+          const slide = document.createElement("div");
+          slide.classList.add("swiper-slide");
+          slide.innerHTML = `<img src="${url}" alt="Imagen">`;
+          contenedor.appendChild(slide);
+        });
+
+        // Inicializar Swiper
+        new Swiper('.swiper', {
+          loop: true,
+          autoplay: { delay: 2000, disableOnInteraction: false },
+          pagination: { el: ".swiper-pagination", clickable: true }
+        });
+
+      } catch (error) {
+        console.error("Error cargando imágenes:", error);
+      }
+    }
+
+    // Cargar imágenes al inicio
+    cargarImagenes();
+
+    // Subir imagen
+    document.getElementById("uploadForm").addEventListener("submit", async function(event) {
       event.preventDefault();
       
-      // Obtener el archivo de imagen
       const formData = new FormData();
       const imageFile = document.getElementById("imageInput").files[0];
       formData.append("image", imageFile);
 
-      // Ocultar el mensaje anterior (si existe)
       document.getElementById("statusMessage").style.display = "none";
       document.getElementById("errorMessage").style.display = "none";
 
-      // Realizar la carga de la imagen utilizando fetch
-      fetch("https://claridad-backend-b3ba12597f85.herokuapp.com/upload", {
-        method: "POST",
-        body: formData,
-      })
-      .then(response => response.json())
-      .then(data => {
+      try {
+        const respuesta = await fetch("https://claridad-backend-b3ba12597f85.herokuapp.com/upload", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await respuesta.json();
         if (data.imageUrl) {
-          // Mostrar mensaje de éxito
           document.getElementById("statusMessage").style.display = "block";
+          cargarImagenes(); // Recargar imágenes en el carrusel
         }
-      })
-      .catch(error => {
-        // Mostrar mensaje de error
+      } catch (error) {
         document.getElementById("errorMessage").style.display = "block";
-      });
+      }
     });
   </script>
 
