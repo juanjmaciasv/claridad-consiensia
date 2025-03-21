@@ -7,18 +7,11 @@
   <meta name="keywords" content="claridad, consciencia, humanos, respuesta, todo lo que es, despertar">
   <meta name="author" content="Juan Macias">
   <title>Humanos conscientes</title>
-  <!-- Fuente de Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* Animación para una entrada suave */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
     /* General */
     body {
-      font-family: 'Poppins', sans-serif; /* Fuente moderna */
+      font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
       color: #333;
       margin: 0;
@@ -31,7 +24,6 @@
       background-color: #fff;
       padding: 50px 20px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      animation: fadeIn 2s ease-in-out;
     }
 
     h1 {
@@ -41,105 +33,21 @@
       font-weight: bold;
     }
 
-    p {
-      font-size: 1.2em;
-      color: #555;
-      padding: 20px 30px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    a {
+    /* Estilo para el mensaje de éxito */
+    .status-message {
+      margin-top: 10px;
       font-size: 1.5em;
-      color: #0066cc;
-      text-decoration: none;
-      margin-top: 20px;
-      display: inline-block;
-      transition: color 0.3s ease;
-      animation: fadeIn 2s ease-in-out;
+      font-weight: bold;
+      color: #4caf50; /* Verde para éxito */
+      display: none; /* Ocultado inicialmente */
     }
 
-    a:hover {
-      color: #004d99;
-    }
-
-    /* Botón CTA */
-    .cta-button {
-      display: inline-block;
-      padding: 15px 30px;
-      font-size: 1.2em;
-      background-color: #0066cc;
-      color: white;
-      border-radius: 25px;
-      text-decoration: none;
-      transition: background-color 0.3s;
-      margin-top: 20px;
-    }
-
-    .cta-button:hover {
-      background-color: #004d99;
-    }
-
-    img {
-      max-width: 100%;
-      border-radius: 10px;
-      margin-top: 20px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    section {
-      padding: 50px 20px;
-      background-color: #fff;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      margin-top: 30px;
-    }
-
-    footer {
-      margin-top: 50px;
-      padding: 20px;
-      background-color: #333;
-      color: white;
-      font-size: 1.1em;
-    }
-
-    /* Carrusel */
-    .carousel-container {
-      position: relative;
-      width: 80%;
-      margin: 0 auto;
-      overflow: hidden;
-    }
-
-    .carousel {
-      display: flex;
-      transition: transform 0.5s ease;
-    }
-
-    .carousel img {
-      width: 100%;
-      max-width: 500px;
-      margin: 0 10px;
-      border-radius: 10px;
-    }
-
-    button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background-color: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      font-size: 2rem;
-      padding: 10px;
-      cursor: pointer;
-    }
-
-    .prev {
-      left: 0;
-    }
-
-    .next {
-      right: 0;
+    .error-message {
+      margin-top: 10px;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #f44336; /* Rojo para error */
+      display: none; /* Ocultado inicialmente */
     }
 
   </style>
@@ -151,74 +59,56 @@
     <p>La verdad. Libre. Sin mirar a quién.</p>
   </header>
 
-  <a href="https://www.youtube.com/watch?v=XkcWmzzRM58&t=718s" class="cta-button">
-    Ver Video
-  </a>
-
-  <img src="images/sara-maikaha.png" alt="Sara Maikaha">
-
-  <!-- Carrusel de imágenes -->
-  <section>
-    <div class="carousel-container">
-      <div id="carousel" class="carousel">
-        <img src="images/sara-maikaha.png" alt="Imagen 1">
-        <!-- Las imágenes se agregarán aquí -->
-      </div>
-      <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
-      <button class="next" onclick="moveSlide(1)">&#10095;</button>
-    </div>
-  </section>
-
   <!-- Formulario de carga de imágenes -->
   <section>
     <h2>Sube tu imagen</h2>
     <form id="uploadForm">
       <input type="file" id="imageInput" accept="image/*" required>
-      <button type="submit" class="cta-button">Subir Imagen</button>
+      <button type="submit">Subir Imagen</button>
     </form>
+    
+    <!-- Mensaje de éxito -->
+    <div id="statusMessage" class="status-message">Imagen cargada con éxito!</div>
+
+    <!-- Mensaje de error -->
+    <div id="errorMessage" class="error-message">Hubo un error al cargar la imagen.</div>
   </section>
 
   <footer>
-    <p> Claridad Consiensia</p>
+    <p>Claridad Consiensia</p>
   </footer>
 
   <script>
-    let slideIndex = 0;
-
-    function moveSlide(step) {
-      const slides = document.querySelectorAll("#carousel img");
-      slideIndex += step;
-
-      if (slideIndex < 0) {
-        slideIndex = slides.length - 1;
-      } else if (slideIndex >= slides.length) {
-        slideIndex = 0;
-      }
-
-      document.getElementById("carousel").style.transform = `translateX(-${slideIndex * 100}%)`;
-    }
-
     document.getElementById("uploadForm").addEventListener("submit", function(event) {
       event.preventDefault();
-
+      
+      // Obtener el archivo de imagen
       const formData = new FormData();
       const imageFile = document.getElementById("imageInput").files[0];
       formData.append("image", imageFile);
 
-      // Llamar al backend para subir la imagen a Cloudinary
-      fetch('https://claridad-backend-b3ba12597f85.herokuapp.com/upload', {  // URL del endpoint de Heroku
-        method: 'POST',
+      // Ocultar el mensaje anterior (si existe)
+      document.getElementById("statusMessage").style.display = "none";
+      document.getElementById("errorMessage").style.display = "none";
+
+      // Realizar la carga de la imagen utilizando fetch
+      fetch("https://claridad-backend-b3ba12597f85.herokuapp.com/upload", {
+        method: "POST",
         body: formData,
       })
       .then(response => response.json())
       .then(data => {
-        // Agregar la nueva imagen al carrusel
-        const newImage = document.createElement("img");
-        newImage.src = data.imageUrl; // El backend devuelve la URL de la imagen
-        document.getElementById("carousel").appendChild(newImage);
+        if (data.imageUrl) {
+          // Mostrar mensaje de éxito
+          document.getElementById("statusMessage").style.display = "block";
+        }
       })
-      .catch(error => console.error("Error al subir la imagen:", error));
+      .catch(error => {
+        // Mostrar mensaje de error
+        document.getElementById("errorMessage").style.display = "block";
+      });
     });
   </script>
+
 </body>
 </html>
