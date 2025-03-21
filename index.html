@@ -129,7 +129,8 @@
       document.getElementById("errorMessage").style.display = "none";
 
       try {
-        const respuesta = await fetch("https://claridad-backend-b3ba12597f85.herokuapp.com/upload", {
+        // Cambié la URL a la correcta
+        const respuesta = await fetch("https://claridad-backend-a2695a32ed3d.herokuapp.com/upload", {
           method: "POST",
           body: formData
         });
