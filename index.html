@@ -10,7 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   <style>
-    /* General */
     body {
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
@@ -34,7 +33,6 @@
       font-weight: bold;
     }
 
-    /* Estilo para los mensajes */
     .status-message, .error-message {
       margin-top: 10px;
       font-size: 1.5em;
@@ -45,7 +43,6 @@
     .status-message { color: #4caf50; }
     .error-message { color: #f44336; }
 
-    /* Estilo del carrusel */
     .swiper {
       width: 80%;
       height: 300px;
@@ -69,7 +66,6 @@
     <p>La verdad. Libre. Sin mirar a quién.</p>
   </header>
 
-  <!-- Formulario de carga de imágenes -->
   <section>
     <h2>Sube tu imagen</h2>
     <form id="uploadForm">
@@ -81,7 +77,6 @@
     <div id="errorMessage" class="error-message">Hubo un error al cargar la imagen.</div>
   </section>
 
-  <!-- Carrusel de imágenes -->
   <section>
     <h2>Galería</h2>
     <div class="swiper">
@@ -96,15 +91,14 @@
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
-    const backendURL = "https://claridad-backend-b3ba12597f85.herokuapp.com/images"; // Endpoint de imágenes
+    const backendURL = "https://claridad-backend-b3ba12597f85.herokuapp.com/images";
 
     async function cargarImagenes() {
       try {
         const respuesta = await fetch(backendURL);
-        const imagenes = await respuesta.json(); // Suponiendo que devuelve un array de URLs
-
+        const imagenes = await respuesta.json();
         const contenedor = document.getElementById("carousel-container");
-        contenedor.innerHTML = ""; // Limpia antes de agregar nuevas imágenes
+        contenedor.innerHTML = "";
 
         imagenes.forEach(url => {
           const slide = document.createElement("div");
@@ -113,25 +107,20 @@
           contenedor.appendChild(slide);
         });
 
-        // Inicializar Swiper
         new Swiper('.swiper', {
           loop: true,
           autoplay: { delay: 2000, disableOnInteraction: false },
           pagination: { el: ".swiper-pagination", clickable: true }
         });
-
       } catch (error) {
         console.error("Error cargando imágenes:", error);
       }
     }
 
-    // Cargar imágenes al inicio
     cargarImagenes();
 
-    // Subir imagen
     document.getElementById("uploadForm").addEventListener("submit", async function(event) {
       event.preventDefault();
-      
       const formData = new FormData();
       const imageFile = document.getElementById("imageInput").files[0];
       formData.append("image", imageFile);
@@ -148,13 +137,15 @@
         const data = await respuesta.json();
         if (data.imageUrl) {
           document.getElementById("statusMessage").style.display = "block";
-          cargarImagenes(); // Recargar imágenes en el carrusel
+          const nuevoSlide = document.createElement("div");
+          nuevoSlide.classList.add("swiper-slide");
+          nuevoSlide.innerHTML = `<img src="${data.imageUrl}" alt="Imagen">`;
+          document.getElementById("carousel-container").appendChild(nuevoSlide);
         }
       } catch (error) {
         document.getElementById("errorMessage").style.display = "block";
       }
     });
   </script>
-
 </body>
 </html>
