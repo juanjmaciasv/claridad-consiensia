@@ -91,7 +91,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
-    const backendURL = "https://claridad-backend-a2695a32ed3d.herokuapp.com/images";
+    const backendURL = "https://claridad-backend-a2695a32ed3d.herokuapp.com/images"; // Endpoint para obtener las imágenes de Cloudinary
 
     async function cargarImagenes() {
       try {
@@ -103,7 +103,7 @@
         imagenes.forEach(url => {
           const slide = document.createElement("div");
           slide.classList.add("swiper-slide");
-          slide.innerHTML = `<img src="${url}" alt="Imagen">`;  // Corregido aquí
+          slide.innerHTML = `<img src="${url}" alt="Imagen">`;
           contenedor.appendChild(slide);
         });
 
@@ -129,7 +129,7 @@
       document.getElementById("errorMessage").style.display = "none";
 
       try {
-        const respuesta = await fetch("https://claridad-backend-a2695a32ed3d.herokuapp.com/upload", {
+        const respuesta = await fetch("https://claridad-backend-b3ba12597f85.herokuapp.com/upload", {
           method: "POST",
           body: formData
         });
@@ -137,13 +137,6 @@
         const data = await respuesta.json();
         if (data.imageUrl) {
           document.getElementById("statusMessage").style.display = "block";
-          const nuevoSlide = document.createElement("div");
-          nuevoSlide.classList.add("swiper-slide");
-          nuevoSlide.innerHTML = `<img src="${data.imageUrl}" alt="Imagen">`;  // Corregido aquí
-          document.getElementById("carousel-container").appendChild(nuevoSlide);
-          
-          // Actualizar la galería con la nueva imagen
-          cargarImagenes();
         }
       } catch (error) {
         document.getElementById("errorMessage").style.display = "block";
@@ -152,4 +145,3 @@
   </script>
 </body>
 </html>
-
