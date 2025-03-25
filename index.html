@@ -67,13 +67,14 @@
   </header>
 
   <section>
-    <h2>Galería Automática</h2>
-    <div class="swiper">
-      <div class="swiper-wrapper" id="carousel-container">
-        <!-- Las imágenes se cargarán aquí dinámicamente -->
-      </div>
-      <div class="swiper-pagination"></div>
-    </div>
+    <h2>Sube tu imagen</h2>
+    <form id="uploadForm">
+      <input type="file" id="imageInput" accept="image/*" required>
+      <button type="submit">Subir Imagen</button>
+    </form>
+    
+    <div id="statusMessage" class="status-message">Imagen cargada con éxito!</div>
+    <div id="errorMessage" class="error-message">Hubo un error al cargar la imagen.</div>
   </section>
 
   <footer>
@@ -82,20 +83,19 @@
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
-    const cloudinaryAPI = "https://api.cloudinary.com/v1_1/dkvywhjrn/resources/image";
+    const backendURL = "https://claridad-backend-a2695a32ed3d.herokuapp.com/images"; // Endpoint para obtener las imágenes de Cloudinary
 
     async function cargarImagenes() {
       try {
-        const response = await fetch(cloudinaryAPI);
-        const data = await response.json();
-        const imagenes = data.resources;
+        const respuesta = await fetch(backendURL);
+        const imagenes = await respuesta.json();
         const contenedor = document.getElementById("carousel-container");
         contenedor.innerHTML = ""; // Limpiar el contenedor antes de agregar nuevas imágenes
 
-        imagenes.forEach(imagen => {
+        imagenes.forEach(url => {
           const slide = document.createElement("div");
           slide.classList.add("swiper-slide");
-          slide.innerHTML = `<img src="${imagen.secure_url}" alt="Imagen">`;
+          slide.innerHTML = `<img src="${url}" alt="Imagen">`;
           contenedor.appendChild(slide);
         });
 
@@ -110,7 +110,31 @@
     }
 
     cargarImagenes();
-  </script>
 
+    document.getElementById("uploadForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      const formData = new FormData();
+      const imageFile = document.getElementById("imageInput").files[0];
+      formData.append("image", imageFile);
+
+      document.getElementById("statusMessage").style.display = "none";
+      document.getElementById("errorMessage").style.display = "none";
+
+      try {
+        // Cambié la URL a la correcta
+        const respuesta = await fetch("https://claridad-backend-a2695a32ed3d.herokuapp.com/upload", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await respuesta.json();
+        if (data.imageUrl) {
+          document.getElementById("statusMessage").style.display = "block";
+        }
+      } catch (error) {
+        document.getElementById("errorMessage").style.display = "block";
+      }
+    });
+  </script>
 </body>
 </html>
