@@ -77,13 +77,20 @@
     <div id="errorMessage" class="error-message">Hubo un error al cargar la imagen.</div>
   </section>
 
+  <div class="swiper">
+    <div class="swiper-wrapper" id="carousel-container"></div>
+    <div class="swiper-pagination"></div>
+  </div>
+
   <footer>
     <p>Claridad Consiensia</p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
-    const backendURL = "https://claridad-backend-a2695a32ed3d.herokuapp.com/images"; // Endpoint para obtener las imágenes de Cloudinary
+    const backendURL = "https://claridad-backend-a2695a32ed3d.herokuapp.com/images"; // Endpoint para obtener imágenes de Cloudinary
+
+    let swiper; // Declarar la variable del carrusel
 
     async function cargarImagenes() {
       try {
@@ -92,24 +99,36 @@
         const contenedor = document.getElementById("carousel-container");
         contenedor.innerHTML = ""; // Limpiar el contenedor antes de agregar nuevas imágenes
 
-        imagenes.forEach(url => {
-          const slide = document.createElement("div");
-          slide.classList.add("swiper-slide");
-          slide.innerHTML = `<img src="${url}" alt="Imagen">`;
-          contenedor.appendChild(slide);
-        });
+        imagenes.forEach(url => agregarImagenAlCarrusel(url));
 
-        new Swiper('.swiper', {
-          loop: true,
-          autoplay: { delay: 2000, disableOnInteraction: false },
-          pagination: { el: ".swiper-pagination", clickable: true }
-        });
+        inicializarSwiper();
       } catch (error) {
         console.error("Error cargando imágenes:", error);
       }
     }
 
-    cargarImagenes();
+    function agregarImagenAlCarrusel(url) {
+      const contenedor = document.getElementById("carousel-container");
+      const slide = document.createElement("div");
+      slide.classList.add("swiper-slide");
+      slide.innerHTML = `<img src="${url}" alt="Imagen">`;
+      contenedor.appendChild(slide);
+
+      if (swiper) {
+        swiper.update(); // Actualiza Swiper con la nueva imagen
+      }
+    }
+
+    function inicializarSwiper() {
+      if (swiper) {
+        swiper.destroy(true, true);
+      }
+      swiper = new Swiper('.swiper', {
+        loop: true,
+        autoplay: { delay: 2000, disableOnInteraction: false },
+        pagination: { el: ".swiper-pagination", clickable: true }
+      });
+    }
 
     document.getElementById("uploadForm").addEventListener("submit", async function(event) {
       event.preventDefault();
@@ -121,7 +140,6 @@
       document.getElementById("errorMessage").style.display = "none";
 
       try {
-        // Cambié la URL a la correcta
         const respuesta = await fetch("https://claridad-backend-a2695a32ed3d.herokuapp.com/upload", {
           method: "POST",
           body: formData
@@ -130,11 +148,14 @@
         const data = await respuesta.json();
         if (data.imageUrl) {
           document.getElementById("statusMessage").style.display = "block";
+          agregarImagenAlCarrusel(data.imageUrl);
         }
       } catch (error) {
         document.getElementById("errorMessage").style.display = "block";
       }
     });
+
+    cargarImagenes();
   </script>
 </body>
 </html>
