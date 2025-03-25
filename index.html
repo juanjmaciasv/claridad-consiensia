@@ -43,6 +43,8 @@
     .status-message { color: #4caf50; }
     .error-message { color: #f44336; }
 
+    /* Comentado el código del carrusel */
+    /*
     .swiper {
       width: 80%;
       height: 300px;
@@ -57,24 +59,24 @@
       height: 100%;
       object-fit: cover;
     }
+    */
 
     /* Ajustes para pantallas grandes (computadora) */
     @media (min-width: 768px) {
-      .swiper {
-        width: 60%; /* Reducir el ancho del carrusel en pantallas grandes */
-        height: 400px; /* Ajustar la altura */
-      }
+      /* .swiper {
+        width: 60%; 
+        height: 400px;
+      } */
     }
 
     /* Ajustes para pantallas pequeñas (móviles) */
     @media (max-width: 767px) {
-      .swiper {
-        width: 100%; /* Asegura que ocupe todo el ancho en móviles */
-        height: 250px; /* Ajusta la altura del carrusel en móviles */
-      }
+      /* .swiper {
+        width: 100%; 
+        height: 250px; 
+      } */
     }
-</style>
-
+  </style>
 </head>
 <body>
 
@@ -94,14 +96,14 @@
     </a>
   </div>
   
-<!-- Botón debajo de la imagen que también redirige al video -->
-<p style="text-align: center; margin-top: 20px;">
-  <a href="https://www.youtube.com/watch?v=XkcWmzzRM58&t=718s" target="_blank">
-    <button style="padding: 10px 20px; font-size: 16px; background-color: #ff0000; color: white; border: none; border-radius: 5px; cursor: pointer;">
-      Ver en YouTube
-    </button>
-  </a>
-</p>
+  <!-- Botón debajo de la imagen que también redirige al video -->
+  <p style="text-align: center; margin-top: 20px;">
+    <a href="https://www.youtube.com/watch?v=XkcWmzzRM58&t=718s" target="_blank">
+      <button style="padding: 10px 20px; font-size: 16px; background-color: #ff0000; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        Ver en YouTube
+      </button>
+    </a>
+  </p>
 
   <section>
     <h2>Sube tu imagen</h2>
@@ -114,10 +116,13 @@
     <div id="errorMessage" class="error-message">Hubo un error al cargar la imagen.</div>
   </section>
 
+  <!-- Comentado el carrusel -->
+  <!-- 
   <div class="swiper">
     <div class="swiper-wrapper" id="carousel-container"></div>
     <div class="swiper-pagination"></div>
   </div>
+  -->
 
   <footer>
     <p>Humanos conscientes</p>
@@ -125,6 +130,8 @@
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
+    // Comentado el código relacionado con el carrusel
+    /*
     const backendURL = "https://claridad-backend-a2695a32ed3d.herokuapp.com/images"; // Endpoint para obtener imágenes de Cloudinary
 
     let swiper; // Declarar la variable del carrusel
@@ -167,34 +174,8 @@
       });
     }
 
-    document.getElementById("uploadForm").addEventListener("submit", async function(event) {
-      event.preventDefault();
-      const formData = new FormData();
-      const imageFile = document.getElementById("imageInput").files[0];
-      formData.append("image", imageFile);
-
-      document.getElementById("statusMessage").style.display = "none";
-      document.getElementById("errorMessage").style.display = "none";
-
-      try {
-        const respuesta = await fetch("https://claridad-backend-a2695a32ed3d.herokuapp.com/upload", {
-          method: "POST",
-          body: formData
-        });
-
-        const data = await respuesta.json();
-        if (data.imageUrl) {
-          document.getElementById("statusMessage").style.display = "block";
-          agregarImagenAlCarrusel(data.imageUrl);
-
-          document.getElementById("imageInput").value = "";
-        }
-      } catch (error) {
-        document.getElementById("errorMessage").style.display = "block";
-      }
-    });
-
     cargarImagenes();
+    */
   </script>
 </body>
 </html>
