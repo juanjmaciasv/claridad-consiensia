@@ -149,6 +149,8 @@
         if (data.imageUrl) {
           document.getElementById("statusMessage").style.display = "block";
           agregarImagenAlCarrusel(data.imageUrl);
+
+          document.getElementById("imageInput").value = "";
         }
       } catch (error) {
         document.getElementById("errorMessage").style.display = "block";
